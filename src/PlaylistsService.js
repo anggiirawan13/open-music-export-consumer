@@ -7,7 +7,7 @@ class PlaylistsService {
 
   async findAll(playlistId, userId) {
     let query = {
-      text: `SELECT p.id, p.name, u.username 
+      text: `SELECT p.id, p.name 
               FROM playlists AS p 
                   INNER JOIN users AS u 
                       ON u.id = p.owner 
@@ -31,9 +31,11 @@ class PlaylistsService {
 
     const songs = await this._pool.query(query);
 
+    const resultPlaylist = playlists.rows[0];
+    resultPlaylist.songs = songs.rows;
+
     return {
-      playlist: playlists.rows,
-      songs: songs.rows,
+      playlist: resultPlaylist,
     };
   }
 }
